@@ -5,7 +5,7 @@
 #include <sys/mman.h>
 
 
-#define SIZE 16
+#define SIZE 64
 
 typedef union {
   float f;
