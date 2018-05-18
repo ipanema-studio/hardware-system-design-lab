@@ -36,9 +36,9 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 	gettimeofday(&start, NULL);
 
 	//Run IP and copy value to DRAM space
-	for (int i = 0; i != matrix_size * matrix_size; i += 64) {
+	for (int i = 0; i != matrix_size; i++) {
 		for (int j = 0; j != matrix_size; j++) {
-			*(fpga_bram + j + 64) = ipt_matrix_f16[i + j];
+			*(fpga_bram + j + 64) = ipt_matrix_f16[i * 64 + j];
 		}
 		*fpga_ip = MAGIC_CODE;
 		std::cout << "hello" << std::endl;
