@@ -44,9 +44,12 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 
 	unsigned int *fpga_ip = (unsigned int *)mmap(NULL, sizeof(int), PROT_WRITE, MAP_SHARED, foo, INSTRUCTION_ADDR);
 	*fpga_ip = MAGIC_CODE;
+	std::cout << "hello" << std::endl;
 	while (*fpga_ip == MAGIC_CODE);
 
-	std::cout << *fpga_bram << std::endl;
+	float result;
+	memcpy(&result, fpga_bram, sizeof(float));
+	std::cout << result << std::endl;
 	
 	gettimeofday(&end, NULL);
 	
