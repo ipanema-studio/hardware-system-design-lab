@@ -27,8 +27,8 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 	int foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
 	foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
 	uint32_t *fpga_bram = (uint32_t *)mmap(NULL, matrix_size * 2 * sizeof(uint32_t), PROT_WRITE, MAP_SHARED, foo, BRAM_BASE);
-	for (int i = matrix_size; i != matrix_size * 2; i++) {
-		*(fpga_bram + i) = ipt_vector_f16[i - matrix_size];
+	for (int i = 0; i != matrix_size; i++) {
+		*(fpga_bram + i) = ipt_vector_f16[i];
 	}
 	unsigned int *fpga_ip = (unsigned int *)mmap(NULL, sizeof(int), PROT_WRITE, MAP_SHARED, foo, INSTRUCTION_ADDR);
 	
@@ -36,9 +36,9 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 	gettimeofday(&start, NULL);
 
 	//Run IP and copy value to DRAM space
-	for (int i = 0; i != matrix_size; i++) {
-		for (int j = i; j != i + matrix_size; j++) {
-			*(fpga_bram + i) = ipt_matrix_f16[j];
+	for (int i = 0; i != matrix_size * matrix_size; i += 64) {
+		for (int j = 0; j != matrix_size; j++) {
+			*(fpga_bram + j + 64) = ipt_matrix_f16[i + j];
 		}
 		*fpga_ip = MAGIC_CODE;
 		std::cout << "hello" << std::endl;
