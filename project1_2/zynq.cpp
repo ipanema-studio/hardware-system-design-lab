@@ -76,7 +76,7 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 		*(fpga_bram + i) = ipt_vector_f16[i];
 	}
 	for (int i = 64; i != 128; i++) {
-		*(fpga_bram + i) = ipt_matrix_f16[(i + 64 * 3)];
+		*(fpga_bram + i) = ipt_matrix_f16[(i + 64 * 4)];
 	}
 
 	unsigned int *fpga_ip = (unsigned int *)mmap(NULL, sizeof(int), PROT_WRITE, MAP_SHARED, foo, INSTRUCTION_ADDR);
