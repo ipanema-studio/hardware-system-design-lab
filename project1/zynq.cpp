@@ -34,9 +34,12 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 
 	int foo;
 	foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
-	uint32_t *fpga_bram = (uint32_t *)mmap(NULL, 64 * sizeof(uint32_t), PROT_WRITE, MAP_SHARED, foo, BRAM_BASE);
-	for (int i = 0; i != 32; i++) {
+	uint32_t *fpga_bram = (uint32_t *)mmap(NULL, 128 * sizeof(uint32_t), PROT_WRITE, MAP_SHARED, foo, BRAM_BASE);
+	for (int i = 0; i != 64; i++) {
 		*(fpga_bram + i) = ipt_vector_f16[i];
+	}
+	for (int i = 64; i != 128; i++) {
+		*(fpga_bram + i) = ipt_matrix_f16[i - 64];
 	}
 
 	unsigned int *fpga_ip = (unsigned int *)mmap(NULL, sizeof(int), PROT_WRITE, MAP_SHARED, foo, INSTRUCTION_ADDR);
