@@ -42,8 +42,9 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 			*(fpga_bram + j + 64) = ipt_matrix_f16[i * 64 + j];
 		}
 		*fpga_ip = MAGIC_CODE;
-		while (*fpga_ip == MAGIC_CODE);
-		sleep(1);
+		std::cout << i << std::endl;
+		while (*fpga_ip == MAGIC_CODE)
+			sleep(1);
 
 		float result;
 		memcpy(&result, fpga_bram, sizeof(float));
