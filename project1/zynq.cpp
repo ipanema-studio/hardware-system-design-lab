@@ -34,6 +34,7 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 	int foo;
 	foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
 	float *fpga_bram = (float *)mmap(NULL, 64 * sizeof(uint32_t), PROT_WRITE, MAP_SHARED, foo, 0x40000000);
+	printf("%p\n", fpga_bram);
 	for (int i = 0; i != 64; i++) {
 		*(fpga_bram + i) = ipt_vector_f16[i];
 		std::cout << (fpga_bram + i) << ": " << *(fpga_bram + i) << std::endl;
