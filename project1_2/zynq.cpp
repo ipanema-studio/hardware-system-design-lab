@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #define BRAM_BASE 0x40000000
 
