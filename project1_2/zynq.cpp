@@ -49,7 +49,7 @@ double arm_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float *
 
 	for(size_t i = -1 ; ++i < matrix_size * matrix_size ; arm_vector_f32[i >> SIZE_SHIFTER]
 		+= f16_to_f32(ipt_matrix_f16 + i) * f16_to_f32(ipt_vector_f16 + (i & ((1 << SIZE_SHIFTER) - 1)))) {
-		if (i == 0)
+		if (i < 64)
 			std::cout << arm_vector_f32[0] << " += " << f16_to_f32(ipt_matrix_f16) << " * " << f16_to_f32(ipt_vector_f16 + (i & ((1 << SIZE_SHIFTER) - 1))) << std::endl;
 	};
 
