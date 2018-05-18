@@ -58,10 +58,10 @@ int main(int argc, char** argv)
   int foo;
   foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
   float *fpga_bram = mmap(NULL, (2*SIZE)* sizeof(float), PROT_WRITE, MAP_SHARED, foo, 0x40000000);
-  printf("%p", fpga_bram);
   for (i = 0; i < 2*SIZE; i++)
   {
     *(fpga_bram + i) = flat[i];
+    printf("%p: %f\n", (fpga_bram + i), *(fpga_bram + i));
   }
 
   // run
