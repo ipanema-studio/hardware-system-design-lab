@@ -31,16 +31,19 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 	//Run IP and copy value to DRAM space
 	for (int i = 0; i != 64; i++)
 		your_vector_f32[i] = 0;
+
 	int foo;
 	foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
-	std::cout << foo << std::endl;
-	uint32_t *fpga_bram = (uint32_t *)mmap(NULL, 64 * sizeof(uint32_t), PROT_WRITE, MAP_SHARED, foo, 0x40000000);
-	if (fpga_bram == MAP_FAILED) return 0;
-	printf("%p\n", fpga_bram);
-	for (int i = 0; i != 64; i++) {
+	uint32_t *fpga_bram = (uint32_t *)mmap(NULL, 64 * sizeof(uint32_t), PROT_WRITE, MAP_SHARED, foo, BRAM_BASE);
+	for (int i = 0; i != 32; i++) {
 		*(fpga_bram + i) = ipt_vector_f16[i];
-		std::cout << (fpga_bram + i) << ": " << *(fpga_bram + i) << std::endl;
 	}
+
+	unsigned int *fpga_ip = (unsigned int *)mmap(NULL, sizeof(int), PROT_WRITE, MAP_SHARED, foo, INSTRUCTION_ADDR);
+	*fpga_ip = MAGIC_CODE;
+	while (*fpga_ip == MAGIC_CODE);
+
+	std::cout << *fpga_bram << std::endl;
 	
 	gettimeofday(&end, NULL);
 	
