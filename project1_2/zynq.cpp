@@ -22,14 +22,14 @@
 
 static inline float f16_to_f32(const uint32_t *input);
 
-/*double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float *your_vector_f32)
+double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float *your_vector_f32)
 {
 	//Map BRAM to virtual memory space and copy data.
 	int foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
 	foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
 	uint32_t *fpga_bram = (uint32_t *)mmap(NULL, matrix_size * 2 * sizeof(uint32_t), PROT_WRITE, MAP_SHARED, foo, BRAM_BASE);
-	for (int i = 0; i != matrix_size; i++) {
-		*(fpga_bram + i) = ipt_vector_f16[i];
+	for (int i = 64; i != matrix_size * 2; i++) {
+		*(fpga_bram + i) = ipt_vector_f16[i - matrix_size];
 	}
 	unsigned int *fpga_ip = (unsigned int *)mmap(NULL, sizeof(int), PROT_WRITE, MAP_SHARED, foo, INSTRUCTION_ADDR);
 	
@@ -39,12 +39,12 @@ static inline float f16_to_f32(const uint32_t *input);
 	//Run IP and copy value to DRAM space
 	for (int i = 0; i != matrix_size; i++) {
 		for (int j = 0; j != matrix_size; j++) {
-			*(fpga_bram + j + 64) = ipt_matrix_f16[i * 64 + j];
+			*(fpga_bram + j) = ipt_matrix_f16[i * 64 + j];
 		}
 		*fpga_ip = MAGIC_CODE;
 		std::cout << i << std::endl;
 		while (*fpga_ip == MAGIC_CODE)
-			sleep(1);
+			std::cout << *fpga_ip << std::endl;
 
 		float result;
 		memcpy(&result, fpga_bram, sizeof(float));
@@ -56,9 +56,9 @@ static inline float f16_to_f32(const uint32_t *input);
 	//Cleanup allocated resources (optional).
 
 	return (double)(end.tv_sec - start.tv_sec) + ((double)(end.tv_usec - start.tv_usec)) / 1000000.0;
-}*/
+}
 
-double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float *your_vector_f32)
+/*double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float *your_vector_f32)
 {
 	//Map BRAM to virtual memory space and copy data.
 	
@@ -93,7 +93,7 @@ double fpga_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float 
 	//Cleanup allocated resources (optional).
 
 	return (double)(end.tv_sec - start.tv_sec) + ((double)(end.tv_usec - start.tv_usec)) / 1000000.0;
-}
+}*/
 
 
 double arm_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float *arm_vector_f32)
