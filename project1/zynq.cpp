@@ -78,12 +78,15 @@ double arm_calculate(uint32_t *ipt_matrix_f16, uint32_t *ipt_vector_f16, float *
 
 static inline float f16_to_f32(const uint32_t *input)
 {
-	char *iptc = (char*)input + 2;
+	/*char *iptc = (char*)input + 2;
 
 	uint32_t half_precision = 0;
 	memcpy(&half_precision, iptc + 1, 1);
-	memcpy(((void*)&half_precision) + 1, iptc, 1);
+	memcpy(((void*)&half_precision) + 1, iptc, 1);*/
 
+	uint32_t half_precision = 0;
+	memcpy(&half_precision, input, sizeof(float));
+	
 	uint32_t opt 	= ((half_precision & 0x8000) << 16)
 			| ((((half_precision & 0x7C00) >> 10) + 112) << 23)
 			| ((half_precision & 0x3FF) << 13);
