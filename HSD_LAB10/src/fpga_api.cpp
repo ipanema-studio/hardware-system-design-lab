@@ -73,8 +73,8 @@ void FPGA::largeMV(const float* large_mat, const float* input,
                 }
             }
             output_fgpa = this->run();
-            for (int k = 0; k != N; k++) {
-                output[k] += output_fgpa[k];
+            for (int k = 0; k != 64; k++) {
+                output[row_base + k] += output_fgpa[k];
             }
         }
     }
