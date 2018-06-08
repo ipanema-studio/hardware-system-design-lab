@@ -61,44 +61,44 @@ void FPGA::largeMV(const float* large_mat, const float* input,
     float* vec = this->vector();
     float* mat = this->matrix();
 
-    // for (int i = 0; i != row_loop; i++) {
-    //     int row_base = i * 64;
-    //     for (int j = 0; j != col_loop; j++) {
-    //         int col_base = j * 64;
-    //         for (int row = row_base; row != row_base + 64; row++) {
-    //             for (int col = col_base; col != col_base + 64; col++) {
-    //                 if (row == row_base) {
-    //                     vec[col - col_base] = (col < M ? input[col] : 0.0f);
-    //                 }
-    //                 mat[(row - row_base) * 64 + (col - col_base)] = ((row < N && col < M) ? large_mat[row * M + col] : 0.0f);
-    //             }
-    //         }
-    //         output_fgpa = this->run();
-    //         for (int k = 0; k != 64; k++) {
-    //             output[row_base + k] += output_fgpa[k];
-    //         }
+    for (int i = 0; i != row_loop; i++) {
+        int row_base = i * 64;
+        for (int j = 0; j != col_loop; j++) {
+            int col_base = j * 64;
+            for (int row = row_base; row != row_base + 64; row++) {
+                for (int col = col_base; col != col_base + 64; col++) {
+                    if (row == row_base) {
+                        vec[col - col_base] = (col < M ? input[col] : 0.0f);
+                    }
+                    mat[(row - row_base) * 64 + (col - col_base)] = ((row < N && col < M) ? large_mat[row * M + col] : 0.0f);
+                }
+            }
+            output_fgpa = this->run();
+            for (int k = 0; k != 64; k++) {
+                output[row_base + k] += output_fgpa[k];
+            }
+        }
+    }
+
+
+    // for (int i = 0; i != 64; i++) {
+    //     vec[i] = 0.0f;
+    // }
+    // for (int i = 0; i != 64; i++) {
+    //     for (int j = 0; j != 64; j++) {
+    //         mat[i * 64 + j] = 0.0f;
     //     }
     // }
-
-
-    for (int i = 0; i != 64; i++) {
-        vec[i] = 0.0f;
-    }
-    for (int i = 0; i != 64; i++) {
-        for (int j = 0; j != 64; j++) {
-            mat[i * 64 + j] = 0.0f;
-        }
-    }
-    for (int i = 0; i != 32; i++) {
-        vec[i] = input[i];
-    }
-    for (int i = 0; i != 32; i++) {
-        for (int j = 0; j != 32; j++) {
-            mat[i * 64 + j] = large_mat[i * 32 + j];
-        }
-    }
-    output_fgpa = this->run();
-    for (int k = 0; k != 32; k++) {
-        output[k] = output_fgpa[k];
-    }
+    // for (int i = 0; i != 32; i++) {
+    //     vec[i] = input[i];
+    // }
+    // for (int i = 0; i != 32; i++) {
+    //     for (int j = 0; j != 32; j++) {
+    //         mat[i * 64 + j] = large_mat[i * 32 + j];
+    //     }
+    // }
+    // output_fgpa = this->run();
+    // for (int k = 0; k != 32; k++) {
+    //     output[k] = output_fgpa[k];
+    // }
 }
