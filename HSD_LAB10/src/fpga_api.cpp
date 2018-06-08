@@ -79,26 +79,4 @@ void FPGA::largeMV(const float* large_mat, const float* input,
             }
         }
     }
-
-
-    // for (int i = 0; i != 64; i++) {
-    //     vec[i] = 0.0f;
-    // }
-    // for (int i = 0; i != 64; i++) {
-    //     for (int j = 0; j != 64; j++) {
-    //         mat[i * 64 + j] = 0.0f;
-    //     }
-    // }
-    // for (int i = 0; i != 32; i++) {
-    //     vec[i] = input[i];
-    // }
-    // for (int i = 0; i != 32; i++) {
-    //     for (int j = 0; j != 32; j++) {
-    //         mat[i * 64 + j] = large_mat[i * 32 + j];
-    //     }
-    // }
-    // output_fgpa = this->run();
-    // for (int k = 0; k != 32; k++) {
-    //     output[k] = output_fgpa[k];
-    // }
 }
